@@ -1,272 +1,399 @@
-import Icon from '@/components/ui/icon';
+import { useState, useEffect, useRef } from 'react';
 
-const features = [
-  {
-    icon: "Zap",
-    title: "Мемы в плейлисте",
-    desc: "Создавай подборки любимых мемов и слушай их по кругу, как любимый альбом.",
-  },
-  {
-    icon: "Users",
-    title: "Совместный вайб",
-    desc: "Слушай с друзьями в реальном времени. Кто первый оценил — тот и автор.",
-  },
-  {
-    icon: "TrendingUp",
-    title: "Тренды 24/7",
-    desc: "Алгоритм знает, что залетело час назад. Ты всегда в теме.",
-  },
-  {
-    icon: "Radio",
-    title: "Мем-радио",
-    desc: "Бесконечный поток контента под твоё настроение. Переключайся — не застревай.",
-  },
-];
-
-const plans = [
-  {
-    name: "Бесплатно",
-    price: "0 ₽",
-    period: "навсегда",
-    perks: ["20 мемов в день", "Общие плейлисты", "Стандартное качество", "Реклама между мемами"],
-    accent: false,
-  },
-  {
-    name: "spotIRA Plus",
-    price: "299 ₽",
-    period: "в месяц",
-    perks: ["Безлимит мемов", "Эксклюзивные треки", "Без рекламы", "Офлайн-мемы", "Ранний доступ"],
-    accent: true,
-  },
-  {
-    name: "Студенческий",
-    price: "99 ₽",
-    period: "в месяц",
-    perks: ["Всё из Plus", "Скидка 66%", "Студенческие мемы", "Групповой вайб"],
-    accent: false,
-  },
-];
-
-const Index = () => {
-  return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white overflow-x-hidden noise-overlay">
-
-      {/* Фоновые блобы */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div
-          className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full"
-          style={{ background: 'radial-gradient(circle, rgba(29,185,84,0.08) 0%, transparent 70%)' }}
-        />
-        <div
-          className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full"
-          style={{ background: 'radial-gradient(circle, rgba(29,185,84,0.06) 0%, transparent 70%)' }}
-        />
-        <div
-          className="absolute top-[40%] left-[60%] w-[300px] h-[300px] rounded-full"
-          style={{ background: 'radial-gradient(circle, rgba(29,185,84,0.04) 0%, transparent 70%)' }}
-        />
-      </div>
-
-      {/* Навигация */}
-      <nav className="relative z-10 flex items-center justify-between px-8 py-6 max-w-7xl mx-auto">
-        <div className="font-montserrat font-black text-2xl tracking-tight">
-          spot<span className="neon-text">IRA</span>
-        </div>
-        <div className="hidden md:flex items-center gap-8 font-ibm text-sm text-white/50">
-          <a href="#features" className="hover:text-white transition-colors cursor-pointer">Возможности</a>
-          <a href="#plans" className="hover:text-white transition-colors cursor-pointer">Тарифы</a>
-          <a href="#about" className="hover:text-white transition-colors cursor-pointer">О нас</a>
-        </div>
-        <button className="font-montserrat font-semibold text-sm px-5 py-2.5 rounded-full neon-btn">
-          Войти
-        </button>
-      </nav>
-
-      {/* Hero */}
-      <section className="relative z-10 flex flex-col items-center text-center px-6 pt-16 pb-24 max-w-5xl mx-auto">
-        <div className="animate-fade-up inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-8 font-ibm text-xs font-medium tracking-widest uppercase"
-          style={{ background: 'rgba(29,185,84,0.1)', border: '1px solid rgba(29,185,84,0.25)', color: '#1DB954' }}>
-          <span className="w-1.5 h-1.5 rounded-full bg-[#1DB954] animate-pulse inline-block" />
-          Стриминг нового поколения
-        </div>
-
-        <h1 className="font-montserrat font-black text-[clamp(3.5rem,10vw,8rem)] leading-none tracking-tighter mb-6 animate-fade-up-delay-1">
-          spot<span className="animate-pulse-neon" style={{ color: '#1DB954' }}>IRA</span>
-        </h1>
-
-        <p className="font-ibm font-light text-[clamp(1.1rem,2.5vw,1.5rem)] text-white/60 max-w-2xl leading-relaxed mb-4 animate-fade-up-delay-2">
-          Мемы, которые ты и так смотришь каждый день,<br />
-          теперь в одном плейлисте
-        </p>
-
-        <p className="font-ibm text-sm text-white/30 mb-12 animate-fade-up-delay-2">
-          Потому что хаос тоже заслуживает порядка
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-4 animate-fade-up-delay-3">
-          <button className="font-montserrat font-bold text-base px-8 py-4 rounded-full neon-btn">
-            Слушать бесплатно
-          </button>
-          <button className="font-montserrat font-semibold text-base px-8 py-4 rounded-full text-white/70 hover:text-white transition-colors"
-            style={{ border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.03)' }}>
-            Как это работает
-          </button>
-        </div>
-
-        {/* Визуализатор */}
-        <div className="mt-20 animate-fade-up-delay-3 w-full max-w-lg">
-          <div className="relative mx-auto w-64 h-64 animate-float">
-            <div className="absolute inset-0 rounded-full"
-              style={{ background: 'conic-gradient(from 0deg, rgba(29,185,84,0.6), rgba(29,185,84,0.1), rgba(29,185,84,0.6))', filter: 'blur(1px)' }}
-            />
-            <div className="absolute inset-[3px] rounded-full bg-[#0f0f0f] flex items-center justify-center">
-              <div className="absolute inset-0 rounded-full"
-                style={{ background: 'radial-gradient(circle at 40% 35%, rgba(29,185,84,0.12), transparent 65%)' }}
-              />
-              <div className="relative text-center">
-                <div className="font-montserrat font-black text-4xl mb-1">
-                  spot<span style={{ color: '#1DB954' }}>IRA</span>
-                </div>
-                <div className="font-ibm text-xs text-white/30 tracking-widest uppercase">Now Playing</div>
-                <div className="flex justify-center gap-1 mt-4">
-                  {[3, 5, 7, 5, 3, 7, 4, 6, 8, 5].map((h, i) => (
-                    <div key={i}
-                      className="w-1 rounded-full"
-                      style={{
-                        height: `${h * 4}px`,
-                        background: '#1DB954',
-                        animation: `pulse-neon ${0.4 + i * 0.15}s ease-in-out infinite alternate`,
-                        opacity: 0.7 + i * 0.03
-                      }}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Возможности */}
-      <section id="features" className="relative z-10 px-6 py-24 max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <p className="font-ibm text-xs tracking-widest uppercase mb-4" style={{ color: '#1DB954' }}>Почему spotIRA</p>
-          <h2 className="font-montserrat font-black text-[clamp(2rem,5vw,3.5rem)] leading-tight">
-            Не просто смешно.<br />
-            <span style={{ color: '#1DB954' }}>Это культура.</span>
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-          {features.map((f, i) => (
-            <div key={i} className="card-dark rounded-2xl p-6 cursor-default transition-all duration-300">
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5"
-                style={{ background: 'rgba(29,185,84,0.12)', border: '1px solid rgba(29,185,84,0.2)' }}>
-                <Icon name={f.icon} size={22} style={{ color: '#1DB954' }} />
-              </div>
-              <h3 className="font-montserrat font-bold text-lg mb-2">{f.title}</h3>
-              <p className="font-ibm text-sm text-white/50 leading-relaxed">{f.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Стата */}
-      <section className="relative z-10 px-6 py-16">
-        <div className="max-w-4xl mx-auto neon-border rounded-3xl p-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            {[
-              { num: "2.4М", label: "мемов в базе" },
-              { num: "840К", label: "активных слушателей" },
-              { num: "∞", label: "часов контента" },
-            ].map((s, i) => (
-              <div key={i}>
-                <div className="font-montserrat font-black text-5xl mb-2 neon-text">{s.num}</div>
-                <div className="font-ibm text-sm text-white/40 uppercase tracking-wider">{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Тарифы */}
-      <section id="plans" className="relative z-10 px-6 py-24 max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <p className="font-ibm text-xs tracking-widest uppercase mb-4" style={{ color: '#1DB954' }}>Тарифы</p>
-          <h2 className="font-montserrat font-black text-[clamp(2rem,5vw,3.5rem)]">
-            Выбери свой <span style={{ color: '#1DB954' }}>вайб</span>
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {plans.map((p, i) => (
-            <div key={i} className={`rounded-2xl p-8 transition-all duration-300 ${p.accent ? '' : 'card-dark hover:border-white/10'}`}
-              style={p.accent ? {
-                background: 'linear-gradient(135deg, rgba(29,185,84,0.15), rgba(29,185,84,0.05))',
-                border: '1px solid rgba(29,185,84,0.4)',
-                boxShadow: '0 0 40px rgba(29,185,84,0.1)'
-              } : {}}>
-              {p.accent && (
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-montserrat font-semibold mb-4"
-                  style={{ background: '#1DB954', color: '#000' }}>
-                  <Icon name="Star" size={10} />
-                  Популярный
-                </div>
-              )}
-              <h3 className="font-montserrat font-bold text-xl mb-1">{p.name}</h3>
-              <div className="flex items-baseline gap-1 mb-1">
-                <span className="font-montserrat font-black text-4xl">{p.price}</span>
-              </div>
-              <p className="font-ibm text-sm text-white/40 mb-6">{p.period}</p>
-              <ul className="space-y-3 mb-8">
-                {p.perks.map((perk, j) => (
-                  <li key={j} className="flex items-center gap-2.5 font-ibm text-sm">
-                    <Icon name="Check" size={14} style={{ color: '#1DB954', flexShrink: 0 }} />
-                    <span className="text-white/70">{perk}</span>
-                  </li>
-                ))}
-              </ul>
-              <button
-                className={`w-full py-3 rounded-full font-montserrat font-semibold text-sm transition-all duration-300 ${p.accent ? 'neon-btn' : 'hover:bg-white/10'}`}
-                style={!p.accent ? { border: '1px solid rgba(255,255,255,0.12)', color: '#fff', background: 'transparent' } : {}}>
-                {p.accent ? 'Подключить Plus' : 'Начать'}
-              </button>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section id="about" className="relative z-10 px-6 py-24 text-center max-w-3xl mx-auto">
-        <h2 className="font-montserrat font-black text-[clamp(2rem,5vw,3.5rem)] leading-tight mb-6">
-          Готов слушать<br />
-          <span className="animate-pulse-neon" style={{ color: '#1DB954' }}>по-новому?</span>
-        </h2>
-        <p className="font-ibm text-white/40 text-lg mb-10">
-          Регистрация занимает 10 секунд.<br />Мемы уже ждут.
-        </p>
-        <button className="font-montserrat font-bold text-lg px-12 py-5 rounded-full neon-btn">
-          Начать слушать
-        </button>
-      </section>
-
-      {/* Footer */}
-      <footer className="relative z-10 border-t border-white/5 px-8 py-8">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="font-montserrat font-black text-xl">
-            spot<span className="neon-text">IRA</span>
-          </div>
-          <p className="font-ibm text-xs text-white/25">© 2026 spotIRA.ru — Мемы это серьёзно</p>
-          <div className="flex gap-6 font-ibm text-xs text-white/30">
-            <a href="#" className="hover:text-white/60 transition-colors">Политика</a>
-            <a href="#" className="hover:text-white/60 transition-colors">Поддержка</a>
-            <a href="#" className="hover:text-white/60 transition-colors">Контакты</a>
-          </div>
-        </div>
-      </footer>
-
-    </div>
-  );
+const TRACKS = {
+  slide1: 'https://files.catbox.moe/27j8s6.mp3',
+  slide2: 'https://files.catbox.moe/tszmmb.mp3',
+  slide3: 'https://files.catbox.moe/el8tgu.mp3',
+  slide4: 'https://files.catbox.moe/f2iogt.mp3',
+  slide5: 'https://files.catbox.moe/5rzyhq.mp3',
 };
 
-export default Index;
+function Circles() {
+  return (
+    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+      {[...Array(8)].map((_, i) => (
+        <div
+          key={i}
+          className="absolute rounded-full border border-white/5"
+          style={{
+            width: `${180 + i * 120}px`,
+            height: `${180 + i * 120}px`,
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            animation: `spin-slow ${18 + i * 6}s linear infinite ${i % 2 === 0 ? '' : 'reverse'}`,
+            opacity: 0.06 + i * 0.01,
+          }}
+        />
+      ))}
+      {[...Array(5)].map((_, i) => (
+        <div
+          key={`blob-${i}`}
+          className="absolute rounded-full"
+          style={{
+            width: `${80 + i * 60}px`,
+            height: `${80 + i * 60}px`,
+            background: 'rgba(29,185,84,0.07)',
+            top: `${15 + i * 17}%`,
+            left: `${10 + i * 19}%`,
+            animation: `float-blob ${6 + i * 2}s ease-in-out infinite alternate`,
+            filter: 'blur(30px)',
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function Countdown() {
+  const [time, setTime] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+  useEffect(() => {
+    const target = new Date('2026-06-27T17:30:00');
+    const tick = () => {
+      const now = new Date();
+      const diff = target.getTime() - now.getTime();
+      if (diff <= 0) return;
+      setTime({
+        days: Math.floor(diff / 86400000),
+        hours: Math.floor((diff % 86400000) / 3600000),
+        minutes: Math.floor((diff % 3600000) / 60000),
+        seconds: Math.floor((diff % 60000) / 1000),
+      });
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <div className="flex gap-4 justify-center mt-6">
+      {[
+        { v: time.days, l: 'дней' },
+        { v: time.hours, l: 'часов' },
+        { v: time.minutes, l: 'минут' },
+        { v: time.seconds, l: 'секунд' },
+      ].map(({ v, l }) => (
+        <div key={l} className="flex flex-col items-center">
+          <div
+            className="text-3xl font-black font-montserrat w-16 h-16 flex items-center justify-center rounded-xl"
+            style={{ background: 'rgba(29,185,84,0.12)', border: '1px solid rgba(29,185,84,0.25)', color: '#1DB954' }}
+          >
+            {String(v).padStart(2, '0')}
+          </div>
+          <span className="text-[10px] text-white/30 mt-1 font-ibm uppercase tracking-wider">{l}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export default function Index() {
+  const [slide, setSlide] = useState(0);
+  const [transitioning, setTransitioning] = useState(false);
+  const [songStarted, setSongStarted] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const trackKeys = ['slide1', 'slide2', 'slide3', 'slide4', 'slide5'] as const;
+
+  const playTrack = (index: number) => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = TRACKS[trackKeys[index]];
+      audioRef.current.volume = 0;
+      audioRef.current.play().catch(() => {});
+      // fade in
+      let vol = 0;
+      const fadeIn = setInterval(() => {
+        vol = Math.min(vol + 0.05, 1);
+        if (audioRef.current) audioRef.current.volume = vol;
+        if (vol >= 1) clearInterval(fadeIn);
+      }, 80);
+    }
+  };
+
+  const fadeOutAndNext = (nextSlide: number) => {
+    if (!audioRef.current) {
+      goTo(nextSlide);
+      return;
+    }
+    let vol = audioRef.current.volume;
+    const fadeOut = setInterval(() => {
+      vol = Math.max(vol - 0.07, 0);
+      if (audioRef.current) audioRef.current.volume = vol;
+      if (vol <= 0) {
+        clearInterval(fadeOut);
+        goTo(nextSlide);
+      }
+    }, 60);
+  };
+
+  const goTo = (nextSlide: number) => {
+    setTransitioning(true);
+    setTimeout(() => {
+      setSlide(nextSlide);
+      setTransitioning(false);
+      playTrack(nextSlide);
+    }, 500);
+  };
+
+  const handleStart = () => {
+    if (!songStarted) {
+      setSongStarted(true);
+      playTrack(0);
+    }
+  };
+
+  const handleNext = (nextSlide: number) => {
+    fadeOutAndNext(nextSlide);
+  };
+
+  return (
+    <div className="min-h-screen bg-[#0a0a0a] text-white font-ibm overflow-hidden relative flex items-center justify-center">
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=IBM+Plex+Sans:wght@300;400;500&display=swap');
+        .font-montserrat { font-family: 'Montserrat', sans-serif; }
+        .font-ibm { font-family: 'IBM Plex Sans', sans-serif; }
+        .neon { color: #1DB954; text-shadow: 0 0 20px rgba(29,185,84,0.5); }
+        .neon-btn {
+          background: #1DB954; color: #000;
+          font-weight: 700; border-radius: 9999px;
+          box-shadow: 0 0 24px rgba(29,185,84,0.4);
+          transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .neon-btn:hover { transform: scale(1.04); box-shadow: 0 0 40px rgba(29,185,84,0.6); }
+        .ghost-btn {
+          border: 1px solid rgba(255,255,255,0.15);
+          color: #fff; border-radius: 9999px;
+          background: rgba(255,255,255,0.04);
+          transition: border-color 0.2s, background 0.2s;
+        }
+        .ghost-btn:hover { border-color: rgba(29,185,84,0.4); background: rgba(29,185,84,0.06); }
+        @keyframes spin-slow { from { transform: translate(-50%,-50%) rotate(0deg); } to { transform: translate(-50%,-50%) rotate(360deg); } }
+        @keyframes float-blob { from { transform: translateY(0) scale(1); } to { transform: translateY(-30px) scale(1.1); } }
+        @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+        .fade-up { animation: fadeUp 0.7s ease forwards; }
+        .fade-up-1 { animation: fadeUp 0.7s 0.15s ease both; }
+        .fade-up-2 { animation: fadeUp 0.7s 0.3s ease both; }
+        .fade-up-3 { animation: fadeUp 0.7s 0.45s ease both; }
+        .fade-up-4 { animation: fadeUp 0.7s 0.6s ease both; }
+        @keyframes pageFadeIn { from { opacity:0; } to { opacity:1; } }
+        @keyframes pageFadeOut { from { opacity:1; } to { opacity:0; } }
+        .page-in { animation: pageFadeIn 0.5s ease forwards; }
+        .page-out { animation: pageFadeOut 0.5s ease forwards; }
+        .stat-card {
+          background: rgba(255,255,255,0.03);
+          border: 1px solid rgba(29,185,84,0.15);
+          border-radius: 16px; padding: 20px;
+        }
+      `}</style>
+
+      <audio ref={audioRef} loop />
+      <Circles />
+
+      <div className={`relative z-10 w-full max-w-sm mx-auto px-6 py-10 flex flex-col items-center text-center min-h-screen justify-center ${transitioning ? 'page-out' : 'page-in'}`}>
+
+        {/* ───────── СЛАЙД 0 ───────── */}
+        {slide === 0 && (
+          <div className="flex flex-col items-center gap-6 w-full">
+            <div className="fade-up text-xs tracking-widest uppercase font-montserrat" style={{ color: 'rgba(29,185,84,0.6)' }}>
+              2026
+            </div>
+            <div className="fade-up-1 font-montserrat font-black text-6xl tracking-tight">
+              spot<span className="neon">IRA</span>
+            </div>
+            <div className="fade-up-2 text-lg font-light text-white/60 leading-relaxed max-w-xs">
+              не просто музыкальные итоги —<br />
+              <span className="text-white font-medium">а приглашение отметить мои 30</span>
+            </div>
+            <div className="fade-up-3 text-base text-white/50">
+              Привет, Игорёк — это для тебя 🤍
+            </div>
+
+            <div className="fade-up-3 w-full">
+              <Countdown />
+            </div>
+
+            <div className="fade-up-4 flex flex-col gap-3 w-full mt-2">
+              {!songStarted ? (
+                <button
+                  className="neon-btn w-full py-4 font-montserrat text-base"
+                  onClick={handleStart}
+                >
+                  ▶ Нажми сюда
+                </button>
+              ) : (
+                <button
+                  className="neon-btn w-full py-4 font-montserrat text-base"
+                  onClick={() => handleNext(1)}
+                >
+                  Смотреть итоги →
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* ───────── СЛАЙД 1 ───────── */}
+        {slide === 1 && (
+          <div className="flex flex-col items-center gap-6 w-full">
+            <div className="fade-up text-xs tracking-widest uppercase font-montserrat" style={{ color: 'rgba(29,185,84,0.6)' }}>
+              Трек, который ассоциируется у меня с тобой
+            </div>
+
+            <div className="fade-up-1 relative w-48 h-48 mx-auto">
+              <div className="absolute inset-0 rounded-full"
+                style={{ background: 'conic-gradient(from 0deg, rgba(29,185,84,0.7), rgba(29,185,84,0.05), rgba(29,185,84,0.7))', animation: 'spin-slow 6s linear infinite' }} />
+              <div className="absolute inset-[3px] rounded-full bg-[#0f0f0f] flex items-center justify-center">
+                <div className="text-4xl">🎵</div>
+              </div>
+            </div>
+
+            <div className="fade-up-2 text-base text-white/60 leading-relaxed max-w-xs">
+              Мы знакомы, кажется, целую вечность, и ты для меня как младший брат.
+              Спасибо тебе за все моменты — и давай продолжать жить нашу лучшую жизнь.
+            </div>
+
+            <div className="fade-up-3 w-full mt-2">
+              <button
+                className="ghost-btn w-full py-4 font-montserrat text-base"
+                onClick={() => handleNext(2)}
+              >
+                Далее →
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ───────── СЛАЙД 2 ───────── */}
+        {slide === 2 && (
+          <div className="flex flex-col items-center gap-6 w-full">
+            <div className="fade-up text-xs tracking-widest uppercase font-montserrat" style={{ color: 'rgba(29,185,84,0.6)' }}>
+              Момент с тобой
+            </div>
+
+            <div className="fade-up-1 text-5xl">✨</div>
+
+            <div className="fade-up-2 text-base text-white/70 leading-relaxed max-w-xs space-y-3">
+              <p>Помнишь, как я покупала вам алкоголь, когда вы этого не могли делать?</p>
+              <p>Или как мы здорово жили в Девяткино, постоянно что‑то новое придумывая?</p>
+              <p>И как ездили в Сортавалу?</p>
+              <p className="text-white/40 italic">Спасибо тебе за эти моменты.</p>
+            </div>
+
+            <div className="fade-up-3 w-full mt-2">
+              <button
+                className="ghost-btn w-full py-4 font-montserrat text-base"
+                onClick={() => handleNext(3)}
+              >
+                Что там дальше?
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ───────── СЛАЙД 3 ───────── */}
+        {slide === 3 && (
+          <div className="flex flex-col items-center gap-6 w-full">
+            <div className="fade-up text-xs tracking-widest uppercase font-montserrat" style={{ color: 'rgba(29,185,84,0.6)' }}>
+              Наша статистика
+            </div>
+
+            <div className="fade-up-1 font-montserrat font-black text-5xl tracking-tight">
+              spot<span className="neon">IRA</span>
+            </div>
+
+            <div className="fade-up-2 flex flex-col gap-3 w-full">
+              {[
+                { label: 'Сколько мы дружим', value: '4 636 дней' },
+                { label: 'Сколько раз ты был на моём дне рождения', value: 'Не сосчитать — очень много' },
+                { label: 'Как сильно я дорожу тобой', value: 'Настолько, насколько это возможно' },
+              ].map(({ label, value }) => (
+                <div key={label} className="stat-card text-left">
+                  <div className="text-xs text-white/35 font-ibm mb-1">{label}</div>
+                  <div className="text-lg font-montserrat font-bold" style={{ color: '#1DB954' }}>{value}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="fade-up-3 text-sm text-white/40 leading-relaxed max-w-xs">
+              И далее я хочу разделить с тобой свои 30 лет и переход в новое десятилетие.
+            </div>
+
+            <div className="fade-up-4 w-full mt-1">
+              <button
+                className="neon-btn w-full py-4 font-montserrat text-base"
+                onClick={() => handleNext(4)}
+              >
+                Подробности →
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ───────── СЛАЙД 4 ───────── */}
+        {slide === 4 && (
+          <div className="flex flex-col items-center gap-6 w-full">
+            <div className="fade-up font-montserrat font-black text-5xl tracking-tight">
+              spot<span className="neon">IRA</span>
+            </div>
+
+            <div className="fade-up-1 text-base text-white/60 leading-relaxed max-w-xs">
+              Жду тебя <span className="text-white font-semibold">27 июня в 17:30</span>
+            </div>
+
+            <div className="fade-up-2 stat-card w-full text-left space-y-2">
+              <div className="text-sm text-white/80">📍 Московский проспект 139А</div>
+              <div className="text-sm text-white/50">м. Электросила</div>
+              <div className="text-xs text-white/35">вход с торца здания через железную калитку</div>
+            </div>
+
+            <div className="fade-up-3 stat-card w-full text-left">
+              <div className="text-xs text-white/35 mb-2 uppercase tracking-wider">Тематика праздника</div>
+              <a
+                href="https://docs.google.com/document/d/19nD4DwoFk2GaUhR5G1j0_YAmeqTiTXoMtmebOjLU_JA/edit?tab=t.0"
+                target="_blank"
+                rel="noreferrer"
+                className="text-lg font-montserrat font-bold underline decoration-dotted"
+                style={{ color: '#1DB954' }}
+              >
+                Eurovision 🎤
+              </a>
+              <div className="text-xs text-white/30 mt-1">нажми, чтобы узнать подробности</div>
+            </div>
+
+            <div className="fade-up-3 stat-card w-full text-left space-y-2">
+              <div className="text-xs text-white/35 mb-1 uppercase tracking-wider">Что тебя ждёт?</div>
+              {[
+                '17:30–18:30 — сбор, лёгкий перекус, первые тосты',
+                '18:30–20:30 — вкусно кушаем, вкусно пьём и проходим квиз по Иришке',
+                '20:30–22:00 — слушаем музыку, общаемся',
+              ].map((item) => (
+                <div key={item} className="text-sm text-white/60 flex gap-2">
+                  <span style={{ color: '#1DB954', flexShrink: 0 }}>▸</span>
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="fade-up-4 text-sm text-white/40">
+              Мой номер знаешь! 🤍
+            </div>
+
+            <div className="fade-up-4 flex flex-col gap-3 w-full">
+              <a
+                href="https://docs.google.com/spreadsheets/d/1Ku3rdanulnFMoDGRRYnycAnj4sJThtFrm7mCLC-oufE/edit?gid=0#gid=0"
+                target="_blank"
+                rel="noreferrer"
+                className="neon-btn w-full py-4 font-montserrat text-base text-center block"
+              >
+                🎁 Wishlist
+              </a>
+            </div>
+          </div>
+        )}
+
+      </div>
+    </div>
+  );
+}
